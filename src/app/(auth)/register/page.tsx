@@ -5,7 +5,7 @@ import { User, Mail, Lock, Phone } from "lucide-react"; //Eye, EyeOff
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function RegisterCard() {
+export default function Register() {
   const { push } = useRouter();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function RegisterCard() {
       password: form.password.value,
     };
 
-    const result = await fetch("/api/user/register", {
+    const result = await fetch("/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
