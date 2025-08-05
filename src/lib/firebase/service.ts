@@ -61,8 +61,11 @@ export async function SignUp(userData: {
   }
 }
 
-export async function SignIn(data: {email: string}) {
-  const q = query(collection(firestore, "users"), where("email", "==", data.email));
+export async function SignIn(data: { email: string }) {
+  const q = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
   const snapshot = await getDocs(q);
 
   const user = snapshot.docs.map((doc) => ({
@@ -74,5 +77,28 @@ export async function SignIn(data: {email: string}) {
     return user[0];
   } else {
     return null;
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+export async function LoginWithGoogle(data: any, callback: Function) {
+  const q = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
+  const snapshot = await getDocs(q);
+
+  const user = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  if (user.length > 0) {
+    callback(user[0]);
+  } else {
+    data.role = "member";
+    await addDoc(collection(firestore, "users"), data).then(() => {
+      callback(data);
+    });
   }
 }
