@@ -94,6 +94,7 @@ export async function LoginWithGoogle(data: any, callback: any) {
   }));
 
   if (user.length > 0) {
+    data.role = user[0].role;
     await updateDoc(doc(firestore, "users", user[0].id), data).then(() => {
       callback({status: true, data: data});
     })
